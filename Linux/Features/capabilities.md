@@ -1,4 +1,6 @@
+# Capabilities
 1. What is Linux capabilities?
+
 Capabilities breaks down the control of privileges with distinct units.
 Capabilities is introduced from Linux kernel 2.2.
 
@@ -51,42 +53,42 @@ criteria to meet:
       CapAmb: 0000000000000000
       ```
       1. With SYS_NICE on:
-      ```
-      root@scg-test01:~# docker run -it -u 1000:1000 --cap-drop all --cap-add SYS_NICE debian:wjdingtmp bash
-      lss@e035892778ca:/$ grep Cap /proc/$$/status 
-      CapInh: 0000000000800000
-      CapPrm: 0000000000000000
-      CapEff: 0000000000000000
-      CapBnd: 0000000000800000
-      CapAmb: 0000000000000000
-      ```
+         ```
+         root@scg-test01:~# docker run -it -u 1000:1000 --cap-drop all --cap-add SYS_NICE debian:wjdingtmp bash
+         lss@e035892778ca:/$ grep Cap /proc/$$/status 
+         CapInh: 0000000000800000
+         CapPrm: 0000000000000000
+         CapEff: 0000000000000000
+         CapBnd: 0000000000800000
+         CapAmb: 0000000000000000
+         ```
       Having the SYS_NICE capability does not mean a user can adjust NICE of a process to higher (lower value):
-      ```
-      lss@eff29e81a251:/$ grep Cap /proc/$$/status
-      CapInh: 0000000000800000
-      CapPrm: 0000000000000000
-      CapEff: 0000000000000000
-      CapBnd: 0000000000800000
-      CapAmb: 0000000000000000
-      lss@eff29e81a251:/$ nice -n -10 sleep 10 &
-      [1] 11
-      lss@eff29e81a251:/$ nice: cannot set niceness: Permission denied
+         ```
+         lss@eff29e81a251:/$ grep Cap /proc/$$/status
+         CapInh: 0000000000800000
+         CapPrm: 0000000000000000
+         CapEff: 0000000000000000
+         CapBnd: 0000000000800000
+         CapAmb: 0000000000000000
+         lss@eff29e81a251:/$ nice -n -10 sleep 10 &
+         [1] 11
+         lss@eff29e81a251:/$ nice: cannot set niceness: Permission denied
 
-      lss@eff29e81a251:/$ ps ax -o pid,ni,cmd
-        PID  NI CMD
-          1   0 bash
-         11   **0** sleep 10
-         12   0 ps ax -o pid,ni,cmd
-      lss@eff29e81a251:/$ 
-      lss@eff29e81a251:/$ nice -n 10 sleep 10 &
-      [2] 13
-      [1]   Done                    nice -n -10 sleep 10
-      lss@eff29e81a251:/$ ps ax -o pid,ni,cmd
-        PID  NI CMD
-          1   0 bash
-         13  **10** sleep 10
-         14   0 ps ax -o pid,ni,cmd
-      ```
+         lss@eff29e81a251:/$ ps ax -o pid,ni,cmd
+           PID  NI CMD
+             1   0 bash
+            11   **0** sleep 10
+            12   0 ps ax -o pid,ni,cmd
+         lss@eff29e81a251:/$ 
+         lss@eff29e81a251:/$ nice -n 10 sleep 10 &
+         [2] 13
+         [1]   Done                    nice -n -10 sleep 10
+         lss@eff29e81a251:/$ ps ax -o pid,ni,cmd
+           PID  NI CMD
+             1   0 bash
+            13  **10** sleep 10
+            14   0 ps ax -o pid,ni,cmd
+         ```
       This is because the nice executable does not have a capability bit set:
       ```
       lss@eff29e81a251:/$ getcap /usr/bin/nice 
@@ -118,8 +120,6 @@ criteria to meet:
       1. Commit the docker image. 
       1. Start the container with the docker image, drop the root privilege,
       and assign the corresponding capabilities using below parameters:
-      ```
-      -u <uid>:<gid> --cap-drop all --cap-add SYS_NICE
-      ```
+      ```-u <uid>:<gid> --cap-drop all --cap-add SYS_NICE```
       1. Start the executable which has the capabilities set, and the
       process/thread now has the corresponidng capabilities. 
