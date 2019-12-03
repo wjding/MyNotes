@@ -19,24 +19,26 @@ criteria to meet:
       capabilities bit set with Permitted and Inheritable. 
 
    1. One can use below command: `grep Cap /proc/<pid>/status` to observe a
-   running process' capabilities. `
+   running process' capabilities. ```
    CapInh: 0000000000000000
    CapPrm: 0000000000000000
    CapEff: 0000000000000000
    CapBnd: 0000003fffffffff
    CapAmb: 0000000000000000
-   `
+   ```
+   Explanations as below: ```
     **CapInh**   bitmap of inheritable capabilities
     **CapPrm**   bitmap of permitted capabilities
     **CapEff**   bitmap of effective capabilities
     **CapBnd**   bitmap of capabilities bounding set
     **CapAmb**   bitmap of ambient capabilities
+   ```
 
 1. Docker related operations
    1. Examples
    SYS_NICE is 0000000000800000. Capabilities of the current shell can be
    checked by `grep Cap /proc/$$/status`
-      1. Container without capabilities: `
+      1. Container without capabilities: ```
       root@scg-test01:~# docker run -it -u 1000:1000 --cap-drop all  debian:wjdingtmp bash
       lss@b9fc7535a944:/$ grep Cap /proc/$$/status 
       CapInh: 0000000000000000
@@ -44,8 +46,8 @@ criteria to meet:
       CapEff: 0000000000000000
       CapBnd: 0000000000000000
       CapAmb: 0000000000000000
-      `
-      1. With SYS_NICE on: `
+      ```
+      1. With SYS_NICE on: ```
       root@scg-test01:~# docker run -it -u 1000:1000 --cap-drop all --cap-add SYS_NICE debian:wjdingtmp bash
       lss@e035892778ca:/$ grep Cap /proc/$$/status 
       CapInh: 0000000000800000
@@ -53,8 +55,8 @@ criteria to meet:
       CapEff: 0000000000000000
       CapBnd: 0000000000800000
       CapAmb: 0000000000000000
-      `
-      Having the SYS_NICE capability does not mean a user can adjust NICE of a process to higher (lower value): `
+      ```
+      Having the SYS_NICE capability does not mean a user can adjust NICE of a process to higher (lower value): ```
       lss@eff29e81a251:/$ grep Cap /proc/$$/status
       CapInh: 0000000000800000
       CapPrm: 0000000000000000
@@ -79,13 +81,13 @@ criteria to meet:
           1   0 bash
          13  **10** sleep 10
          14   0 ps ax -o pid,ni,cmd
-      `
-      This is because the nice executable does not have a capability bit set: `
+      ```
+      This is because the nice executable does not have a capability bit set: ```
       lss@eff29e81a251:/$ getcap /usr/bin/nice 
       lss@eff29e81a251:/$ 
-      `
+      ```
       Now let's see another case, where the executable has the SYS_NICE
-      capability bit set: `
+      capability bit set: ```
       lss@eff29e81a251:/$ getcap /usr/bin/renice
       /usr/bin/renice = cap_sys_nice+eip
       lss@eff29e81a251:/$ sleep 3600 &
@@ -100,7 +102,7 @@ criteria to meet:
       18 (process ID) old priority 10, new priority -10
       lss@eff29e81a251:/$ ps ax -o pid,ni,cmd | grep -v grep | grep sleep
          18 **-10** sleep 3600
-      `
+      ```
 
 
    1. Procedure to use capabilities in a least privileged container:
@@ -108,8 +110,8 @@ criteria to meet:
       1. Make sure the owner of the executable is root.
       1. Commit the docker image. 
       1. Start the container with the docker image, drop the root privilege,
-      and assign the corresponding capabilities using below parameters: `
+      and assign the corresponding capabilities using below parameters: ```
       -u <uid>:<gid> --cap-drop all --cap-add SYS_NICE
-      `
+      ```
       1. Start the executable which has the capabilities set, and the
       process/thread now has the corresponidng capabilities. 
