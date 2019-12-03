@@ -3,7 +3,6 @@
 
 Capabilities breaks down the control of privileges with distinct units.
 Capabilities is introduced from Linux kernel 2.2.
-
 1. What should you know to capabilities?
    1. Capabilities can be attributes assigned to a process/thread. They can be
 of 3 types:
