@@ -120,8 +120,7 @@ criteria to meet:
       1. Commit the docker image. 
       1. Start the container with the docker image, drop the root privilege,
       and assign the corresponding capabilities using below parameters:
-      ```
+         ```
       -u <uid>:<gid> --cap-drop all --cap-add SYS_NICE
-      ```
-      1. Start the executable which has the capabilities set, and the
+         ```1. Start the executable which has the capabilities set, and the
       process/thread now has the corresponidng capabilities. 
