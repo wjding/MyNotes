@@ -43,7 +43,7 @@
 ## Docker related operations
    1. Procedure to use capabilities in a least privileged container:
       1. Assign the needed capabilities to the executable. 
-      1. Make sure the owner of the executable is root. <- may not needed.
+      1. Make sure the owner of the executable is root. *<- may not be needed.*
 
          As long as the executable has the corresponding cap, it works. For
          SYS_NICE, it works. Need to see in which case it won't work. 
