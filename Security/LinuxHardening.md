@@ -1,6 +1,6 @@
 # Hardening
 ## Netfilter
-   1. Limit packet rate
+   1. Limit connection attempt rate
 
 ```shell
 iptables -N FREQ_CHECK
