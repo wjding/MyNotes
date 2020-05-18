@@ -2,7 +2,8 @@
 ## What is Linux capabilities?
 
    Capabilities breaks down the control of privileges with distinct units.
-   Capabilities is introduced from Linux kernel 2.2.
+   Capabilities is introduced since Linux kernel 2.2, and enhanced in 2.6.24
+   and kept improving after that.
 
 ## What should you know to capabilities?
    1. Capabilities can be a set of privileges assigned to a process/thread.
