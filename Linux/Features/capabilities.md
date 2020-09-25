@@ -11,6 +11,8 @@
       1. Permitted
       1. Inheritable
       1. Effective
+      1. Bounding (since Linux 2.6.25)
+      1. Ambient (since Linux 4.3)
 
    1. Capabilities can also be a set of privileges assigned to an executable.
    They have the same 3 types as those of process/thread. This impacts the
